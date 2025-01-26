@@ -1,27 +1,34 @@
-<div class="product-form-container">
-  <h2>{{ product.id ? 'Edit' : 'Add' }} Product</h2>
-  <form (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput id="name" [(ngModel)]="product.name" name="name" required>
-    </mat-form-field>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input matInput placeholder="Code" formControlName="code" />
+  </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Description</mat-label>
-      <input matInput id="description" [(ngModel)]="product.description" name="description" required>
-    </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Designation" formControlName="designation" />
+  </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Price</mat-label>
-      <input matInput type="number" id="price" [(ngModel)]="product.price" name="price" required>
-    </mat-form-field>
+  <mat-form-field>
+    <input matInput type="number" placeholder="Prix" formControlName="prix" />
+  </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Category</mat-label>
-      <input matInput id="category" [(ngModel)]="product.category" name="category" required>
-    </mat-form-field>
+  <mat-form-field>
+    <input matInput type="number" placeholder="Quantite" formControlName="quantite" />
+  </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Save</button>
-    <button mat-button routerLink="/">Cancel</button>
-  </form>
-</div>
+  <mat-form-field>
+    <input matInput type="date" placeholder="Date Achat" formControlName="dateAchat" />
+  </mat-form-field>
+
+  <mat-checkbox formControlName="enPromotion">En Promotion</mat-checkbox>
+
+  <mat-form-field>
+    <mat-select placeholder="Categorie" formControlName="categorie">
+      <mat-option *ngFor="let categorie of categories" [value]="categorie">
+        {{ categorie.libelle }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Save</button>
+  <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
+</form>
