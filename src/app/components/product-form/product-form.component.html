@@ -1,34 +1,107 @@
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-  <mat-form-field>
-    <input matInput placeholder="Code" formControlName="code" />
-  </mat-form-field>
+<div class="form-container">
+  <mat-card class="product-form-card">
+    <div class="form-header">
+      <mat-icon>{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+      <h2>{{ isEditMode ? 'Edit Product' : 'Create Product' }}</h2>
+    </div>
 
-  <mat-form-field>
-    <input matInput placeholder="Designation" formControlName="designation" />
-  </mat-form-field>
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <input type="hidden" formControlName="id">
+      
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code">
+          <mat-icon matSuffix>code</mat-icon>
+          <mat-error *ngIf="productForm.get('code')?.hasError('required') && productForm.get('code')?.touched">
+            Code is required.
+          </mat-error>
+        </mat-form-field>
 
-  <mat-form-field>
-    <input matInput type="number" placeholder="Prix" formControlName="prix" />
-  </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Designation</mat-label>
+          <input matInput formControlName="designation">
+          <mat-icon matSuffix>label</mat-icon>
+          <mat-error *ngIf="productForm.get('designation')?.hasError('required') && productForm.get('designation')?.touched">
+            Designation is required.
+          </mat-error>
+        </mat-form-field>
 
-  <mat-form-field>
-    <input matInput type="number" placeholder="Quantite" formControlName="quantite" />
-  </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Price</mat-label>
+          <input matInput type="number" formControlName="prix">
+          <mat-icon matSuffix>attach_money</mat-icon>
+          <mat-error *ngIf="productForm.get('prix')?.hasError('required') && productForm.get('prix')?.touched">
+            Price is required.
+          </mat-error>
+          <mat-error *ngIf="productForm.get('prix')?.hasError('min') && productForm.get('prix')?.touched">
+            Price must be greater than or equal to 0.
+          </mat-error>
+        </mat-form-field>
 
-  <mat-form-field>
-    <input matInput type="date" placeholder="Date Achat" formControlName="dateAchat" />
-  </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <input matInput type="number" formControlName="quantite">
+          <mat-icon matSuffix>inventory</mat-icon>
+          <mat-error *ngIf="productForm.get('quantite')?.hasError('required') && productForm.get('quantite')?.touched">
+            Quantity is required.
+          </mat-error>
+          <mat-error *ngIf="productForm.get('quantite')?.hasError('min') && productForm.get('quantite')?.touched">
+            Quantity must be greater than or equal to 0.
+          </mat-error>
+        </mat-form-field>
 
-  <mat-checkbox formControlName="enPromotion">En Promotion</mat-checkbox>
+        <mat-form-field appearance="outline">
+          <mat-label>Purchase Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dateAchat">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="productForm.get('dateAchat')?.hasError('required') && productForm.get('dateAchat')?.touched">
+            Purchase Date is required.
+          </mat-error>
+        </mat-form-field>
 
-  <mat-form-field>
-    <mat-select placeholder="Categorie" formControlName="categorie">
-      <mat-option *ngFor="let categorie of categories" [value]="categorie">
-        {{ categorie.libelle }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="categorie">
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.libelle }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>category</mat-icon>
+          <mat-error *ngIf="productForm.get('categorie')?.hasError('required') && productForm.get('categorie')?.touched">
+            Category is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-  <button mat-raised-button color="primary" type="submit">Save</button>
-  <button mat-raised-button color="warn" (click)="onCancel()">Cancel</button>
-</form>
+      <div class="promotion-checkbox">
+        <mat-checkbox formControlName="enPromotion" color="primary">On Promotion</mat-checkbox>
+      </div>
+
+      <div class="form-actions">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+          {{ isEditMode ? 'Update' : 'Add' }}
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="onCancel()">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+      </div>
+    </form>
+  </mat-card>
+
+  <div class="category-section">
+    <mat-form-field appearance="outline">
+      <mat-label>New Category</mat-label>
+      <input matInput [(ngModel)]="categoryName">
+      <mat-icon matSuffix>bookmark</mat-icon>
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" (click)="onAddCategory()">
+      <mat-icon>add</mat-icon>
+      Add Category
+    </button>
+  </div>
+</div>

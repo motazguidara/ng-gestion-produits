@@ -1,23 +1,13 @@
+import { Categorie } from "./categorie.model";
 
+// src/app/models/product.model.ts
 export interface Product {
-  id?: number; // Optional for new products
+  enPromotion: any;
+  id: number;
   code: string;
   designation: string;
   prix: number;
   quantite: number;
-  dateAchat: string;
-  enPromotion: boolean;
-  categorie: Stock; // Add category field
-}
-
-export interface Stock {
-  id?: number;
-  code: string;
-  libelle: string;
-}
-
-export interface Stock {
-  id?: number;
-  code: string;
-  libelle: string;
+  dateAchat: string; // Or Date if you're using Date objects
+  categorie: Categorie | null; // Reference to the Category model
 }
